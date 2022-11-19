@@ -1,27 +1,57 @@
 local TableUtil = {}; do
-    function TableUtil:SortTable(Table)
-        local SortedTable = {}
-        for _, Value in next, Table do
-            table.insert(SortedTable, Value)
-        end
-        for Index = 1, #SortedTable do
-            for Index2 = 1, #SortedTable do
-                if SortedTable[Index] < SortedTable[Index2] then
-                    local Temp = SortedTable[Index]
-                    SortedTable[Index] = SortedTable[Index2]
-                    SortedTable[Index2] = Temp
+    function TableUtil:SortTable(Table, method)
+        if method == 'number' then
+            local SortedTable = {}
+            local TableLength = #Table
+
+            for Int = 1, TableLength do
+                local LowestValue = math.huge
+                local LowestValueIndex = 0
+                
+                for Index, Value in next, Table do
+                    if tonumber(Value) < LowestValue then
+                        LowestValue = tonumber(Value)
+                        LowestValueIndex = Index
+                    end
                 end
+                table.insert(SortedTable, Table[LowestValueIndex])
+                table.remove(Table, LowestValueIndex)
             end
+
+            return SortedTable
+        elseif method == 'letter' then
+            local SortedTable = {}
+            local TableLength = #Table
+    
+            for Int = 1, TableLength do
+                local LowestValue = 'z'
+                local LowestValueIndex = 0
+                
+                for Index, Value in next, Table do
+                    if Value < LowestValue then
+                        LowestValue = Value
+                        LowestValueIndex = Index
+                    end
+                end
+                table.insert(SortedTable, Table[LowestValueIndex])
+                table.remove(Table, LowestValueIndex)
+            end
+    
+            return SortedTable
+        else
+            error('Invalid method')
         end
-        return SortedTable
     end
+
     function TableUtil:RemoveDuplicates(Table)
         local NewTable = {}
+
         for _, Value in next, Table do
             if not table.find(NewTable, Value) then
                 table.insert(NewTable, Value)
             end
         end
+
         return NewTable
     end
 end
